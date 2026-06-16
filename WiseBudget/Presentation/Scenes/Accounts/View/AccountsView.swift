@@ -8,48 +8,80 @@
 import SwiftUI
 
 struct AccountsView: View {
-    @State var isShowAccountForm: Bool = false
-    @StateObject var viewModel = Assembly.createAccountsViewModel()
+    var onSelect: ((Account) -> Void)? = nil
+    var selectedAccountOverride: Account? = nil
+    
+    @Environment(\.dismiss) private var dismiss
+    
+    @EnvironmentObject private var appState: AppState
+    
+    @StateObject var viewModel = Assembly.shared.createAccountsViewModel()
     
     var body: some View {
         VStack {
-            Button {
-                isShowAccountForm.toggle()
-            } label: {
-                Image("plus")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 25, height: 25)
-                    .padding()
-                    .background(.black)
-                    .clipShape(Circle())
+            
+            SheetHeader(title: "Accounts") {
+                HStack {
+                    SheetHeaderActionButton(icon: "plus") {
+                        viewModel.editingAccount = nil
+                        viewModel.isShowAccountForm = true
+                    }
+                    SheetHeaderActionButton(icon: "arrow-up-down") {
+                        viewModel.toggleAccounts.toggle()
+                    }
+                }
             }
             
-            ForEach(viewModel.accounts) { item in
-                AccountCardView(iconName: item.iconName, accountName: item.name, accountBalance: "\(item.balance)")
+            ScrollView {
+                ForEach(appState.accounts) { item in
+                    AccountCardView(
+                        account: item,
+                        selected: (selectedAccountOverride ?? appState.selectedAccount) == item,
+                        onEditTapped: {
+                            viewModel.editingAccount = item
+                        },
+                        toggleMode: $viewModel.toggleAccounts,
+                        isShowAccountForm: $viewModel.isShowAccountForm
+                    )
+                    .onTapGesture {
+                        if let onSelect {
+                            onSelect(item)
+                            dismiss()
+                        } else {
+                            appState.selectedAccount = item
+                            dismiss()
+                        }
+                    }
+                }
             }
+            .scrollIndicators(.hidden)
+            .padding(.vertical)
+            
+            Spacer()
 
         }
+        .ignoresSafeArea()
         .frame(maxHeight: .infinity)
         .frame(maxWidth: .infinity)
-        .padding(.horizontal, 12)
+        .padding(.horizontal, 16)
+        .padding(.top, 24)
         .background(.mainBackground)
-        .sheet(isPresented: $isShowAccountForm) {
-            AccountFormView()
-                .presentationDetents([.medium])
+        .sheet(isPresented: $viewModel.isShowAccountForm) {
+            AccountFormView(account: viewModel.editingAccount)
+                .presentationCornerRadius(12)
                 .presentationDragIndicator(.visible)
         }
-        .onChange(of: isShowAccountForm) { _, isPresented in
+        .onReceive(appState.accountsDidChange) { _ in
+            appState.loadAccounts()
+        }
+        .onChange(of: viewModel.isShowAccountForm) { _, isPresented in
             if !isPresented {
-                viewModel.fetchAccounts()
+                appState.loadAccounts()
             }
         }
-        .onAppear {
-            viewModel.fetchAccounts()
-        }
+//        .onAppear {
+//            viewModel.fetchAccounts()
+//        }
     }
 }
 
-#Preview {
-    AccountsView()
-}

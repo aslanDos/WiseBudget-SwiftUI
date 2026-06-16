@@ -6,3 +6,20 @@
 //
 
 import Foundation
+
+protocol DeleteCategoryUseCase: AnyObject {
+    func execute(id: UUID) throws
+}
+
+class DeleteCategoryUseCaseImpl: DeleteAccountUseCase {
+    
+    private let repository: CategoryRepository
+    
+    init(repository: CategoryRepository) {
+        self.repository = repository
+    }
+    
+    func execute(id: UUID) throws {
+        try repository.deleteCategory(id: id)
+    }
+}

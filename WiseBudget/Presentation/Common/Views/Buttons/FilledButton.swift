@@ -10,7 +10,7 @@ import SwiftUI
 struct FilledButton: View {
     var text: String
     var fillColor: Color
-    var textColor: Color
+    var textColor: Color = .onAppSecondary
     var action: (() -> Void)?
     
     var body: some View {
@@ -18,12 +18,12 @@ struct FilledButton: View {
             action?()
         } label: {
             Text(text)
-                .poppins(.medium, 12)
-                .foregroundStyle(textColor)
+                .poppins(.medium, 12, textColor)
                 .padding(.vertical, 12)
+                .frame(height: 44)
                 .frame(maxWidth: .infinity)
                 .background(fillColor)
-                .clipShape(Capsule())
+                .clipShape(RoundedRectangle(cornerRadius: 12))
         }
 
     }

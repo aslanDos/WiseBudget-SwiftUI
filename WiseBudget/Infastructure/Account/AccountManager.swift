@@ -29,6 +29,7 @@ class AccountManager: AccountDataSource {
         entity.currencyCode = account.currencyCode
         entity.iconName = account.iconName
         entity.iconColorName = account.iconColorName
+        entity.updatedAt = account.updatedAt
         
         try context.save()
     }
@@ -45,6 +46,13 @@ class AccountManager: AccountDataSource {
     }
     
     func deleteAccount(id: UUID) throws {
-        //
+        let req: NSFetchRequest<AccountEntity> = AccountEntity.fetchRequest()
+        req.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+
+        let entities = try context.fetch(req)
+
+        entities.forEach(context.delete)
+
+        try context.save()
     }
 }

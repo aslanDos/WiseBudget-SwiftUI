@@ -8,8 +8,9 @@
 import SwiftUI
 
 extension View {
-    func poppins(_ font: Poppins = .regular, _ size: CGFloat = 14) -> some View {
+    func poppins(_ font: Poppins = .regular, _ size: CGFloat = 14, _ color: Color = .textPrimary) -> some View {
         self
+            .foregroundStyle(color)
             .font(.custom(font.rawValue, size: size))
     }
 }

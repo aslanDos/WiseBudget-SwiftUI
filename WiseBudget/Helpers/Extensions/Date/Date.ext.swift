@@ -66,6 +66,34 @@ extension Date {
         Calendar.current.isDate(self, inSameDayAs: date)
     }
     
+    func isInSameMonth(as other: Date) -> Bool {
+        Calendar.current.isDate(self, equalTo: other, toGranularity: .month)
+    }
+
+    var monthGridDates: [Date] {
+        let calendar = Calendar.current
+        let comps = calendar.dateComponents([.year, .month], from: self)
+        guard let firstOfMonth = calendar.date(from: comps) else { return [] }
+
+        let firstWeekStart = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: firstOfMonth)) ?? firstOfMonth
+
+        let monthRange = calendar.range(of: .day, in: .month, for: firstOfMonth) ?? 1..<31
+        let lastOfMonth = calendar.date(byAdding: .day, value: (monthRange.count - 1), to: firstOfMonth) ?? firstOfMonth
+
+        let lastWeekStart = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: lastOfMonth)) ?? lastOfMonth
+        let lastWeekEnd = calendar.date(byAdding: .day, value: 6, to: lastWeekStart) ?? lastOfMonth
+
+        var dates: [Date] = []
+        var d = firstWeekStart
+        while d <= lastWeekEnd {
+            dates.append(d)
+            guard let next = calendar.date(byAdding: .day, value: 1, to: d) else { break }
+            d = next
+            if dates.count > 42 { break } // safety guard
+        }
+        return dates
+    }
+    
     static let weekDaySymbols = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"]
 }
 
@@ -89,3 +117,4 @@ extension Date {
         return Self.displayDateFormatter.string(from: self)
     }
 }
+

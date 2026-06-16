@@ -2,7 +2,7 @@
 //  TransactionEntity+CoreDataClass.swift
 //  WiseBudget
 //
-//  Created by Aslan Dossymzhan 2 on 10.06.2026.
+//  Created by Aslan Dossymzhan 2 on 18.06.2026.
 //
 //
 
@@ -25,14 +25,14 @@ extension TransactionEntity {
     }
 
     @NSManaged public var amount: Double
-    @NSManaged public var categoryId: UUID?
-    @NSManaged public var createdAt: Date?
-    @NSManaged public var date: Date?
-    @NSManaged public var id: UUID?
+    @NSManaged public var categoryId: UUID
+    @NSManaged public var createdAt: Date
+    @NSManaged public var date: Date
+    @NSManaged public var id: UUID
     @NSManaged public var note: String?
-    @NSManaged public var type: String?
-    @NSManaged public var updatedAt: Date?
-    @NSManaged public var account: AccountEntity?
+    @NSManaged public var type: String
+    @NSManaged public var updatedAt: Date
+    @NSManaged public var accountId: UUID
 
 }
 

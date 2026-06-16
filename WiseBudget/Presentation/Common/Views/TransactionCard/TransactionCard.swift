@@ -8,35 +8,89 @@
 import SwiftUI
 
 struct TransactionCard: View {
-    var body: some View {
-        HStack {
-            Image("wallet")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 20, height: 20)
-                .padding(12)
-                .foregroundStyle(.blue)
-                .background(.blue.opacity(0.3))
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-            
-            VStack(alignment: .leading) {
-                Text("Category")
-                    .poppins(.semibold, 16)
-                
-                Text("Account Name")
-                    .poppins(.regular, 12)
-                    
-            }
-            
-            Spacer()
-            
-            Text("+ 30,013 T")
-                .poppins(.regular, 16)
+    
+    @EnvironmentObject private var appState: AppState
+    
+    let tr: Transaction
+    let action: () -> Void
+    
+    private var amountColor: Color {
+        if tr.type == .income { .green}
+        else if tr.type == .expense { .red}
+        else {.textPrimary}
+    }
+    
+    var category: Category? {
+        appState.categories.first {
+            $0.id == tr.categoryId
         }
-        .padding(.vertical, 8)
-        .padding(.horizontal, 12)
-        .background(.cardBackground)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+    }
+    
+    var account: Account? {
+        appState.accounts.first {
+            $0.id == tr.accountId
+        }
+    }
+    
+    var body: some View {
+        Button {
+            action()
+        } label: {
+            
+            HStack(spacing: 12) {
+                
+                let category = appState.categories.first {
+                    $0.id == tr.categoryId
+                }
+                
+                Image(category?.iconName ?? "wallet")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 20, height: 20)
+                    .padding(12)
+                    .foregroundStyle(Color(category?.iconColorName ?? "appPrimary"))
+                    .background(Color(category?.iconColorName ?? "appPrimary").opacity(0.3))
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                
+                VStack(alignment: .leading) {
+                    Text(category?.name ?? "Default")
+                        .poppins(.semibold, 14)
+                    
+                    HStack {
+                        if let accountName = account?.name {
+                            Text(accountName)
+                                .poppins(.regular, 10)
+                                .foregroundStyle(.secondary)
+                        }
+                        
+                        if let _ = account, let trNote = tr.note, !trNote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                            Text("•")
+                                .poppins(.regular, 10)
+                        }
+                        
+                        if let trNote = tr.note, !trNote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                            
+                            Text(trNote)
+                                .poppins(.regular, 10)
+                        }
+                        
+                    }
+                }
+                
+                Spacer()
+                
+                Text(
+                    tr.amount.formattedAmount(type: tr.type, currency: "₸", decimals: 2)
+                )
+                .poppins(.regular, 14, amountColor)
+            }
+            .padding(.vertical, 8)
+            .padding(.leading, 8)
+            .padding(.trailing, 16)
+            .background(.cardBackground)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+        }
+        .buttonStyle(Pressable())
     }
 }
 

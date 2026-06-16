@@ -6,3 +6,10 @@
 //
 
 import Foundation
+
+protocol CategoryRepository {
+    func createCategory(category: Category) throws
+    func updateCategory(category: Category) throws
+    func fetchCategories(completion: (Result<[Category], Error>) -> Void) throws
+    func deleteCategory(id: UUID) throws
+}

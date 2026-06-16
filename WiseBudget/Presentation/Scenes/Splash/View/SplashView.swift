@@ -8,11 +8,36 @@
 import SwiftUI
 
 struct SplashView: View {
+    
+    @State private var scale: CGFloat = 0.7
+    
+    @Binding var isFinished: Bool
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            
+            Color(.mainBackground)
+                .ignoresSafeArea()
+            
+            HStack(spacing: 0) {
+                Text("Wise")
+                
+                Text("Budget")
+                    .foregroundStyle(.appPrimary)
+            }
+            .poppins(.bold, 28)
+            .scaleEffect(scale)
+        
+        }
+        .onAppear() {
+            withAnimation(.easeOut(duration: 1)) {
+                scale = 1
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                isFinished = true
+            }
+        }
     }
 }
 
-#Preview {
-    SplashView()
-}

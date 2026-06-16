@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol CategoryDateSource {
+protocol CategoryDataSource {
     func createNewCategory(category: Category) throws
     func updateCategory(category: Category) throws
     func fetchCategories(completion: (Result<[Category], Error> ) -> Void) throws

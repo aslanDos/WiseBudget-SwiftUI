@@ -8,11 +8,27 @@
 import SwiftUI
 
 struct SheetHeaderActionButton: View {
+    
+    var color: Color = .textPrimary
+    var icon: String
+    var action: () -> Void
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Button {
+            action()
+        } label: {
+            Image(icon)
+                .resizable()
+                .scaledToFit()
+                .foregroundStyle(color)
+                .frame(width: 14, height: 14)
+                .frame(
+                    width: UIConstants.controlHeight,
+                    height: UIConstants.controlHeight
+                )
+                .clipShape(Circle())
+        }
+        .buttonStyle(.glass)
     }
 }
 
-#Preview {
-    SheetHeaderActionButton()
-}

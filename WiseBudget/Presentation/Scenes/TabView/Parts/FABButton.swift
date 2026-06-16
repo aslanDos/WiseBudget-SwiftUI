@@ -17,15 +17,16 @@ struct FABButton: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 18, height: 18)
+                .foregroundStyle(.white)
+                .padding(.vertical, 16)
+                .padding(.horizontal, 18)
+                .background(.appPrimary)
+                .clipShape(
+                    RoundedRectangle(cornerRadius: 12)
+                )
+                .frame(maxWidth: .infinity)
         }
-        .foregroundStyle(.white)
-        .padding(.vertical, 16)
-        .padding(.horizontal, 18)
-        .background(.appPrimary)
-        .clipShape(
-            RoundedRectangle(cornerRadius: 12)
-        )
-        .frame(maxWidth: .infinity)
+        .buttonStyle(Pressable())
     }
 }
 

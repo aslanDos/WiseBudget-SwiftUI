@@ -17,16 +17,17 @@ struct ActionButton: View {
             Image(icon)
                 .resizable()
                 .scaledToFit()
-                .frame(width: 18, height: 18)
-                .foregroundStyle(.appPrimary)
-                .padding(.horizontal,12)
-                .padding(.vertical, 10)
-                .background(.onAppSecondary)
-                .clipShape(
-                    RoundedRectangle(cornerRadius: 12)
+                .frame(width: 14, height: 14)
+                .frame(
+                    width: UIConstants.controlHeight,
+                    height: UIConstants.controlHeight
                 )
-            
+                .foregroundStyle(.textPrimary)
+                .clipShape(
+                    Circle()
+                )
         }
+        .buttonStyle(.glass)
 
     }
 }

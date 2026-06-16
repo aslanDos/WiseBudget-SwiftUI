@@ -9,12 +9,16 @@ import SwiftUI
 
 struct AnalyticsView: View {
     var body: some View {
-        VStack {
-            Text("Analytics View")
+        VStack (alignment: .leading) {
+            Text("Analytics")
+                .poppins(.semibold, 18)
+                .padding(.vertical)
+            
+            Spacer()
         }
         .frame(maxHeight: .infinity)
         .frame(maxWidth: .infinity)
-        .padding(.horizontal, 12)
+        .padding(.horizontal, 16)
         .background(.mainBackground)
         
     }

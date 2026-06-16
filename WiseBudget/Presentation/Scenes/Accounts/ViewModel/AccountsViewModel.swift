@@ -14,22 +14,12 @@ class AccountsViewModel: ObservableObject {
         self.fetchAccountsUseCase = fetchAccountsUseCase
     }
     
+    @Published var isShowAccountForm: Bool = false
+    @Published var toggleAccounts: Bool = false
+    @Published var editingAccount: Account?
     @Published var accounts: [Account] = []
     
-    func fetchAccounts() {
-        do {
-            try fetchAccountsUseCase.execute { result in
-                switch result {
-                case .success(let success):
-                    DispatchQueue.main.async {
-                        self.accounts = success
-                    }
-                case .failure(let failure):
-                    print(failure.localizedDescription)
-                }
-            }
-        } catch {
-            print(error.localizedDescription)
-        }
+    func setUp() {
+        
     }
 }

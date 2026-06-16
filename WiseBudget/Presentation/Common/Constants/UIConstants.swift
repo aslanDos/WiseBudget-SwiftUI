@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+enum UIConstants {
+    static let controlHeight: CGFloat = 24
+}

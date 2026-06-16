@@ -6,3 +6,20 @@
 //
 
 import Foundation
+
+protocol CreateCategoryUseCase: AnyObject {
+    func execute(category: Category) throws
+}
+
+class CreateCategoryUseCaseImpl: CreateCategoryUseCase {
+    
+    private let repository: CategoryRepository
+    
+    init(repository: CategoryRepository) {
+        self.repository = repository
+    }
+    
+    func execute(category: Category) throws {
+        try repository.createCategory(category: category)
+    }
+}
